@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QS Controller</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@400;600;700&display=swap');
+
+  :root {
+    --bg:       #0d0f12;
+    --surface:  #161a20;
+    --border:   #2a2f38;
+    --orange:   #ff6b00;
+    --orange2:  #ff9a3c;
+    --green:    #00e676;
+    --red:      #ff3d3d;
+    --blue:     #4fc3f7;
+    --text:     #e8eaf0;
+    --muted:    #6b7280;
+    --mono:     'Share Tech Mono', monospace;
+    --sans:     'Barlow', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #1a1200 0%, #0d0f12 60%);
+    border-bottom: 2px solid var(--orange);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header .logo {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  header h1 { font-size: 17px; font-weight: 700; letter-spacing: 1px; }
+  header span { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+
+  #statusDot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--red);
+    margin-left: auto;
+    box-shadow: 0 0 8px var(--red);
+    transition: all .3s;
+  }
+  #statusDot.on { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 480px; margin: 0 auto; padding: 12px 12px 0; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px; height: 14px;
+    background: var(--orange);
+    border-radius: 2px;
+  }
+
+  /* ── MONITOR ── */
+  #monitorBox {
+    background: #0a0c0e;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    min-height: 56px;
+  }
+  #rpmLine { color: var(--green); font-size: 15px; margin-bottom: 4px; }
+  #logLine { color: var(--muted); font-size: 11px; line-height: 1.5; max-height: 60px; overflow-y: auto; }
+
+  /* ── KONEKSI ── */
+  #statusText {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: none;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-orange { background: var(--orange); color: #000; }
+  .btn-orange:hover:not(:disabled) { background: var(--orange2); }
+  .btn-red    { background: #2a1010; color: var(--red); border: 1px solid var(--red); }
+  .btn-red:hover:not(:disabled) { background: #3a1515; }
+  .btn-blue   { background: #0d1f2d; color: var(--blue); border: 1px solid var(--blue); }
+  .btn-blue:hover:not(:disabled) { background: #142436; }
+  .btn-ghost  { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .btn-ghost:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ── INPUT ROW ── */
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .input-label {
+    font-size: 12px;
+    color: var(--muted);
+    width: 80px;
+    flex-shrink: 0;
+    font-family: var(--mono);
+  }
+  .input-row input {
+    flex: 1;
+    background: #0a0c0e;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 7px 10px;
+    outline: none;
+    transition: border .2s;
+  }
+  .input-row input:focus { border-color: var(--orange); }
+  .input-row .btn-set {
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--orange);
+    background: transparent;
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--mono);
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .input-row .btn-set:hover:not(:disabled) { background: var(--orange); color: #000; }
+  .input-row .btn-set:disabled { opacity: .3; cursor: not-allowed; }
+
+  /* ── MODE TOGGLE ── */
+  .mode-toggle { display: flex; gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .mode-toggle button {
+    flex: 1; padding: 8px; border: none; cursor: pointer;
+    font-family: var(--sans); font-weight: 600; font-size: 12px;
+    background: transparent; color: var(--muted); transition: all .2s;
+  }
+  .mode-toggle button.active { background: var(--orange); color: #000; }
+  .mode-toggle button:disabled { opacity: .3; cursor: not-allowed; }
+
+  /* ── TOOLS GRID ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .tool-btn {
+    padding: 10px 6px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #0a0c0e;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+  }
+  .tool-btn:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+  .tool-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 10px 0;
+  }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1e2530;
+    border: 1px solid var(--orange);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    transition: transform .3s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── CHROME WARNING ── */
+  #chromeWarn {
+    background: #1a1000;
+    border: 1px solid var(--orange);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 12px;
+    color: var(--orange2);
+    margin-bottom: 10px;
+    display: none;
+    font-family: var(--mono);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚡</div>
+  <div>
+    <h1>QS CONTROLLER</h1>
+    <span>ESP32 Quick Shifter</span>
+  </div>
+  <div id="statusDot"></div>
+</header>
+
+<div class="container">
+
+  <div id="chromeWarn">⚠ Gunakan Chrome di Android. Web Bluetooth tidak support di Firefox / Safari / iPhone.</div>
+
+  <!-- MONITOR -->
+  <div class="card">
+    <div class="card-title">Monitor</div>
+    <div id="monitorBox">
+      <div id="rpmLine">RPM: — | Sens: —</div>
+      <div id="logLine">Belum terhubung...</div>
+    </div>
+  </div>
+
+  <!-- KONEKSI -->
+  <div class="card">
+    <div class="card-title">Koneksi BLE</div>
+    <div id="statusText">Status: Belum terhubung</div>
+    <div class="btn-row">
+      <button class="btn btn-orange" id="btnScan" onclick="scanBLE()">🔍 Scan ESP32</button>
+      <button class="btn btn-red" id="btnDisc" onclick="disconnect()" disabled>✕ Putus</button>
+    </div>
+  </div>
+
+  <!-- QUICK SHIFTER -->
+  <div class="card">
+    <div class="card-title">Quick Shifter</div>
+
+    <div class="input-row">
+      <span class="input-label">SETVAL</span>
+      <input type="number" id="i_setval" placeholder="nilai sens tekan">
+      <button class="btn-set" id="b_setval" onclick="kirimInput('SETVAL','i_setval')" disabled>SET</button>
+    </div>
+
+    <div class="input-row">
+      <span class="input-label">Threshold</span>
+      <input type="number" id="i_t" placeholder="selisih manual">
+      <button class="btn-set" id="b_t" onclick="kirimInput('T','i_t')" disabled>SET</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="font-size:11px; color:var(--muted); margin-bottom:6px; font-family:var(--mono)">MODE TUAS</div>
+    <div class="mode-toggle">
+      <button id="modeTekan" onclick="setMode(0)" disabled>⬇ TEKAN (M0)</button>
+      <button id="modeTarik" onclick="setMode(1)" disabled>⬆ TARIK (M1)</button>
+    </div>
+  </div>
+
+  <!-- CUT DURATION QS -->
+  <div class="card">
+    <div class="card-title">Cut Duration QS</div>
+    <div class="input-row">
+      <span class="input-label">1k – 4k</span>
+      <input type="number" id="i_c1" placeholder="ms">
+      <button class="btn-set" onclick="kirimCut(1,'i_c1')" disabled id="b_c1">SET</button>
+    </div>
+    <div class="input-row">
+      <span class="input-label">4k – 6k</span>
+      <input type="number" id="i_c2" placeholder="ms">
+      <button class="btn-set" onclick="kirimCut(2,'i_c2')" disabled id="b_c2">SET</button>
+    </div>
+    <div class="input-row">
+      <span class="input-label">6k – 8k</span>
+      <input type="number" id="i_c3" placeholder="ms">
+      <button class="btn-set" onclick="kirimCut(3,'i_c3')" disabled id="b_c3">SET</button>
+    </div>
+    <div class="input-row">
+      <span class="input-label">8k – 10k</span>
+      <input type="number" id="i_c4" placeholder="ms">
+      <button class="btn-set" onclick="kirimCut(4,'i_c4')" disabled id="b_c4">SET</button>
+    </div>
+    <div class="input-row">
+      <span class="input-label">10k+</span>
+      <input type="number" id="i_c5" placeholder="ms">
+      <button class="btn-set" onclick="kirimCut(5,'i_c5')" disabled id="b_c5">SET</button>
+    </div>
+  </div>
+
+  <!-- PIT LIMITER -->
+  <div class="card">
+    <div class="card-title">Pit Limiter</div>
+    <div class="input-row">
+      <span class="input-label">RPM Limit</span>
+      <input type="number" id="i_pl" placeholder="RPM">
+      <button class="btn-set" onclick="kirimInput('PL','i_pl')" disabled id="b_pl">SET</button>
+    </div>
+    <div class="input-row">
+      <span class="input-label">Cut Dur</span>
+      <input type="number" id="i_pd" placeholder="ms">
+      <button class="btn-set" onclick="kirimInput('PD','i_pd')" disabled id="b_pd">SET</button>
+    </div>
+    <div class="input-row">
+      <span class="input-label">Rest Dur</span>
+      <input type="number" id="i_pr" placeholder="ms">
+      <button class="btn-set" onclick="kirimInput('PR','i_pr')" disabled id="b_pr">SET</button>
+    </div>
+    <div class="divider"></div>
+    <button class="btn btn-ghost" style="font-size:12px;padding:8px 14px" onclick="kirim('PI')" id="b_pi" disabled>📋 Cek Setting Pit</button>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="card">
+    <div class="card-title">Tools</div>
+    <div class="tools-grid">
+      <button class="tool-btn" onclick="kirim('DEBUG')" id="t_debug" disabled>🔍 DEBUG</button>
+      <button class="tool-btn" onclick="kirim('RECAL')" id="t_recal" disabled>🔄 RECAL</button>
+      <button class="tool-btn" onclick="kirim('INFO')" id="t_info" disabled>📄 INFO</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast">OK</div>
+
+<script>
+  const SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+  const CHAR_RX_UUID = '6e400002-b5a3-f393-e0a9-e50e24dcca9e'; // HP → ESP
+  const CHAR_TX_UUID = '6e400003-b5a3-f393-e0a9-e50e24dcca9e'; // ESP → HP
+
+  let bleDevice = null, rxChar = null;
+
+  // Cek browser support
+  window.addEventListener('load', () => {
+    if (!navigator.bluetooth) {
+      document.getElementById('chromeWarn').style.display = 'block';
+    }
+  });
+
+  // ── SCAN & CONNECT ──
+  async function scanBLE() {
+    try {
+      bleDevice = await navigator.bluetooth.requestDevice({
+        filters: [{ namePrefix: 'ESP32' }],
+        optionalServices: [SERVICE_UUID]
+      });
+      setStatus('Menghubungkan...');
+      const server  = await bleDevice.gatt.connect();
+      const service = await server.getPrimaryService(SERVICE_UUID);
+      rxChar        = await service.getCharacteristic(CHAR_RX_UUID);
+      const txChar  = await service.getCharacteristic(CHAR_TX_UUID);
+
+      await txChar.startNotifications();
+      txChar.addEventListener('characteristicvaluechanged', onData);
+
+      bleDevice.addEventListener('gattserverdisconnected', onDisconnect);
+
+      setConnected(true);
+      toast('Terhubung ke ' + bleDevice.name);
+    } catch(e) {
+      setStatus('Gagal: ' + e.message);
+      toast('❌ ' + e.message);
+    }
+  }
+
+  function onData(e) {
+    const msg = new TextDecoder().decode(e.target.value).trim();
+    if (msg.includes('RPM:')) {
+      document.getElementById('rpmLine').textContent = msg;
+    } else {
+      const log = document.getElementById('logLine');
+      log.textContent = msg + '\n' + log.textContent;
+      log.textContent = log.textContent.substring(0, 300);
+    }
+  }
+
+  function disconnect() {
+    if (bleDevice && bleDevice.gatt.connected) bleDevice.gatt.disconnect();
+  }
+
+  function onDisconnect() {
+    setConnected(false);
+    toast('Koneksi terputus');
+  }
+
+  // ── KIRIM DATA ──
+  async function kirim(cmd) {
+    if (!rxChar) return;
+    try {
+      const enc = new TextEncoder().encode(cmd);
+      await rxChar.writeValue(enc);
+      toast('✓ ' + cmd);
+    } catch(e) {
+      toast('❌ Gagal kirim');
+    }
+  }
+
+  function kirimInput(prefix, inputId) {
+    const val = document.getElementById(inputId).value;
+    if (!val) { toast('⚠ Isi nilai dulu'); return; }
+    kirim(prefix + val);
+  }
+
+  function kirimCut(range, inputId) {
+    const val = document.getElementById(inputId).value;
+    if (!val) { toast('⚠ Isi nilai dulu'); return; }
+    kirim('C' + range + ':' + val);
+  }
+
+  function setMode(m) {
+    kirim('M' + m);
+    document.getElementById('modeTekan').classList.toggle('active', m === 0);
+    document.getElementById('modeTarik').classList.toggle('active', m === 1);
+  }
+
+  // ── UI STATE ──
+  function setConnected(on) {
+    document.getElementById('statusDot').className = on ? 'on' : '';
+    document.getElementById('btnScan').disabled = on;
+    document.getElementById('btnDisc').disabled = !on;
+    setStatus(on ? ('Terhubung ✓ ' + (bleDevice?.name || '')) : 'Belum terhubung');
+
+    const ids = ['b_setval','b_t','b_c1','b_c2','b_c3','b_c4','b_c5',
+                 'b_pl','b_pd','b_pr','b_pi','t_debug','t_recal','t_info'];
+    ids.forEach(id => { const el = document.getElementById(id); if(el) el.disabled = !on; });
+
+    document.getElementById('modeTekan').disabled = !on;
+    document.getElementById('modeTarik').disabled = !on;
+
+    if (!on) {
+      document.getElementById('rpmLine').textContent = 'RPM: — | Sens: —';
+      document.getElementById('logLine').textContent = 'Belum terhubung...';
+    }
+  }
+
+  function setStatus(txt) {
+    document.getElementById('statusText').textContent = 'Status: ' + txt;
+  }
+
+  // ── TOAST ──
+  let toastTimer;
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
