@@ -7,148 +7,48 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap');
         :root { 
-            --bg-main: #0f1115;
-            --bg-card: #16191f; 
-            --bg-input: #0a0c0f;
-            --text-main: #94a3b8; 
-            --text-light: #f1f5f9; 
-            --accent-orange: #64748b;
-            --accent-red: #ef4444; 
-            --accent-green: #10b981;
-            --border-color: #1e293b;
+            --bg-main: #0f1115; --bg-card: #16191f; --bg-input: #0a0c0f;
+            --text-main: #94a3b8; --text-light: #f1f5f9; --accent-orange: #64748b;
+            --accent-red: #ef4444; --accent-green: #10b981; --border-color: #1e293b;
         }
-        body { 
-            font-family: 'Roboto', sans-serif; 
-            background-color: var(--bg-main); 
-            color: var(--text-light); 
-            margin: 0; padding: 15px; padding-bottom: 40px;
-        }
-        .app-header {
-            display: flex; align-items: center;
-            padding: 10px 0 20px 0;
-            border-bottom: 2px solid var(--accent-orange);
-            margin-bottom: 20px;
-        }
-        .app-icon {
-            background: var(--accent-orange); color: #fff;
-            width: 45px; height: 45px; border-radius: 10px;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 24px; font-weight: bold; margin-right: 15px;
-        }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-main); color: var(--text-light); margin: 0; padding: 15px; padding-bottom: 40px; }
+        .app-header { display: flex; align-items: center; padding: 10px 0 20px 0; border-bottom: 2px solid var(--accent-orange); margin-bottom: 20px; }
+        .app-icon { background: var(--accent-orange); color: #fff; width: 45px; height: 45px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; margin-right: 15px; }
         .app-title h1 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; }
         .app-title p { margin: 2px 0 0 0; font-size: 0.75rem; color: var(--text-main); font-family: 'JetBrains Mono', monospace;}
-        .status-dot {
-            width: 12px; height: 12px; border-radius: 50%;
-            background-color: var(--accent-red);
-            margin-left: auto; box-shadow: 0 0 8px var(--accent-red);
-            transition: all 0.3s;
-        }
-        .warning-box {
-            background: rgba(100, 116, 139, 0.1);
-            border: 1px solid rgba(100, 116, 139, 0.3);
-            color: #94a3b8; padding: 15px; border-radius: 8px;
-            font-size: 0.85rem; margin-bottom: 20px; line-height: 1.4;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .alert-err {
-            background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4);
-            color: #fca5a5; padding: 12px; border-radius: 8px;
-            font-size: 0.8rem; margin-bottom: 15px;
-            font-family: 'JetBrains Mono', monospace; display: none; line-height: 1.5;
-        }
-        .card {
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 15px; margin-bottom: 20px;
-        }
-        .card-title {
-            font-size: 0.85rem; font-weight: bold; color: var(--accent-orange);
-            margin-bottom: 15px; display: flex; align-items: center; letter-spacing: 1px;
-        }
-        .card-title::before {
-            content: ""; display: inline-block; width: 3px; height: 14px;
-            background: var(--accent-orange); margin-right: 8px;
-        }
-        .monitor-display {
-            background: var(--bg-input); border-radius: 8px; padding: 20px;
-            margin-bottom: 15px; border: 1px solid var(--border-color);
-        }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; background-color: var(--accent-red); margin-left: auto; box-shadow: 0 0 8px var(--accent-red); transition: all 0.3s; }
+        .warning-box { background: rgba(100,116,139,0.1); border: 1px solid rgba(100,116,139,0.3); color: #94a3b8; padding: 15px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px; line-height: 1.4; font-family: 'JetBrains Mono', monospace; }
+        .alert-err { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; padding: 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 15px; font-family: 'JetBrains Mono', monospace; display: none; line-height: 1.5; }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        .card-title { font-size: 0.85rem; font-weight: bold; color: var(--accent-orange); margin-bottom: 15px; display: flex; align-items: center; letter-spacing: 1px; }
+        .card-title::before { content: ""; display: inline-block; width: 3px; height: 14px; background: var(--accent-orange); margin-right: 8px; }
+        .monitor-display { background: var(--bg-input); border-radius: 8px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border-color); }
         .monitor-grid { display: flex; justify-content: space-between; text-align: center; }
         .monitor-box { flex: 1; }
         .monitor-box:first-child { border-right: 1px solid var(--border-color); }
         .monitor-label { font-size: 0.75rem; color: var(--text-main); font-family: 'JetBrains Mono', monospace; margin-bottom: 5px; }
-        .monitor-value { 
-            font-family: 'JetBrains Mono', monospace; font-size: 2.8rem;
-            font-weight: bold; color: var(--accent-green);
-            text-shadow: 0 0 10px rgba(46, 213, 115, 0.2); transition: color 0.3s;
-        }
-        .monitor-status {
-            font-size: 0.8rem; color: var(--text-main); font-family: 'JetBrains Mono', monospace;
-            text-align: left; margin-top: 15px; padding-top: 15px;
-            border-top: 1px dashed var(--border-color); transition: color 0.3s;
-        }
+        .monitor-value { font-family: 'JetBrains Mono', monospace; font-size: 2.8rem; font-weight: bold; color: var(--accent-green); text-shadow: 0 0 10px rgba(46,213,115,0.2); transition: color 0.3s; }
+        .monitor-status { font-size: 0.8rem; color: var(--text-main); font-family: 'JetBrains Mono', monospace; text-align: left; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border-color); transition: color 0.3s; }
         .btn-group { display: flex; gap: 10px; }
-        .btn {
-            padding: 12px 15px; border-radius: 8px; border: none;
-            font-weight: bold; font-size: 0.9rem; cursor: pointer; flex: 1;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-            transition: opacity 0.2s;
-        }
+        .btn { padding: 12px 15px; border-radius: 8px; border: none; font-weight: bold; font-size: 0.9rem; cursor: pointer; flex: 1; display: flex; justify-content: center; align-items: center; gap: 8px; transition: opacity 0.2s; }
         .btn-orange { background: var(--accent-orange); color: white; }
         .btn-dark { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .w-100 { width: 100%; margin-top: 10px; box-sizing: border-box; }
-        .input-row {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 12px;
-        }
+        .input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .input-row label { color: var(--text-main); font-size: 0.9rem; font-family: 'JetBrains Mono', monospace; flex: 1; }
-        .input-row input, .input-row select {
-            background: var(--bg-input); border: 1px solid var(--border-color);
-            color: #fff; padding: 10px; border-radius: 6px; width: 140px;
-            font-family: 'JetBrains Mono', monospace; font-size: 1rem;
-            text-align: center; transition: color 0.3s ease;
-        }
+        .input-row input, .input-row select { background: var(--bg-input); border: 1px solid var(--border-color); color: #fff; padding: 10px; border-radius: 6px; width: 140px; font-family: 'JetBrains Mono', monospace; font-size: 1rem; text-align: center; transition: color 0.3s ease; }
         .input-row input:focus, .input-row select:focus { outline: 1px solid var(--accent-orange); }
-        .log-box {
-            background: var(--bg-input); color: var(--accent-green);
-            font-family: 'JetBrains Mono', monospace; padding: 12px;
-            height: 120px; overflow-y: scroll; border-radius: 8px;
-            font-size: 0.75rem; border: 1px solid var(--border-color); margin-top: 10px;
-        }
+        .log-box { background: var(--bg-input); color: var(--accent-green); font-family: 'JetBrains Mono', monospace; padding: 12px; height: 120px; overflow-y: scroll; border-radius: 8px; font-size: 0.75rem; border: 1px solid var(--border-color); margin-top: 10px; }
         .log-tx { color: #64748b; }
         .log-err { color: var(--accent-red); }
-
-        /* RPM CORRECTION */
-        .rpm-corr-row {
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .rpm-corr-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem; color: var(--text-main); flex: 1;
-        }
-        .rpm-corr-controls {
-            display: flex; align-items: center; gap: 12px;
-        }
-        .btn-adj {
-            background: var(--bg-input); color: #fff;
-            border: 1px solid var(--border-color);
-            width: 38px; height: 38px; border-radius: 8px;
-            font-size: 1.2rem; cursor: pointer; flex: none;
-            display: flex; align-items: center; justify-content: center;
-            transition: background 0.2s;
-        }
+        .rpm-corr-row { display: flex; align-items: center; justify-content: space-between; }
+        .rpm-corr-label { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-main); flex: 1; }
+        .rpm-corr-controls { display: flex; align-items: center; gap: 12px; }
+        .btn-adj { background: var(--bg-input); color: #fff; border: 1px solid var(--border-color); width: 38px; height: 38px; border-radius: 8px; font-size: 1.2rem; cursor: pointer; flex: none; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
         .btn-adj:active { background: #1e293b; }
-        #rpmMult {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.4rem; font-weight: bold;
-            color: var(--accent-green); min-width: 45px; text-align: center;
-        }
-        .rpm-corr-hint {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem; color: var(--text-main);
-            margin-top: 10px; text-align: center;
-            padding-top: 10px; border-top: 1px dashed var(--border-color);
-        }
+        #rpmMult { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: bold; color: var(--accent-green); min-width: 45px; text-align: center; }
+        .rpm-corr-hint { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-main); margin-top: 10px; text-align: center; padding-top: 10px; border-top: 1px dashed var(--border-color); }
     </style>
 </head>
 <body>
@@ -163,7 +63,6 @@
 </header>
 
 <div class="warning-box">⚠ jare kasdi nak butuhmu pasir aku yo butuh</div>
-
 <div class="alert-err" id="alertErr"></div>
 
 <div class="card">
@@ -206,7 +105,6 @@
     </div>
 </div>
 
-<!-- RPM CORRECTION CARD -->
 <div class="card">
     <div class="card-title">RPM CORRECTION</div>
     <div class="rpm-corr-row">
@@ -218,7 +116,7 @@
         </div>
     </div>
     <div class="rpm-corr-hint">
-        Tap − / + untuk koreksi ±0.1 × per tap &nbsp;|&nbsp; Default: ×2.0
+        Tap − / + untuk koreksi ±0.1 × per tap &nbsp;|&nbsp; Default: ×2.0<br>
         (untuk koreksi rpm motor dengan module QS biar akurat)
     </div>
 </div>
@@ -273,8 +171,9 @@ const TX_UUID      = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
 let bleDevice, rxCharacteristic, txCharacteristic;
 let isConnecting = false;
 
-// SESUDAH
-let rpmMultiplier = parseFloat(localStorage.getItem('rpmMult') || '2.0');
+// RPM CORRECTION — try-catch biar tidak crash kalau localStorage tidak tersedia
+let rpmMultiplier = 2.0;
+try { rpmMultiplier = parseFloat(localStorage.getItem('rpmMult') || '2.0'); } catch(e) {}
 document.getElementById('rpmMult').textContent = rpmMultiplier.toFixed(1);
 
 function adjustRpm(delta) {
@@ -282,8 +181,9 @@ function adjustRpm(delta) {
     if (rpmMultiplier < 0.1) rpmMultiplier = 0.1;
     if (rpmMultiplier > 9.9) rpmMultiplier = 9.9;
     document.getElementById('rpmMult').textContent = rpmMultiplier.toFixed(1);
-    localStorage.setItem('rpmMult', rpmMultiplier); // simpan otomatis
+    try { localStorage.setItem('rpmMult', rpmMultiplier); } catch(e) {}
 }
+
 const connectBtn    = document.getElementById('connectBtn');
 const disconnectBtn = document.getElementById('disconnectBtn');
 const bleState      = document.getElementById('bleState');
@@ -354,8 +254,6 @@ connectBtn.addEventListener('click', async () => {
 
         setUI(true, 'Terkoneksi ✓');
         logToTerminal('Bluetooth Berhasil Terkoneksi!');
-
-        // Auto-request semua setting setelah konek
         setTimeout(() => sendCmd('INFO'), 600);
         setTimeout(() => sendCmd('PI'),   1200);
 
@@ -405,10 +303,7 @@ function handleNotifications(event) {
     if (text.includes('RPM:') && text.includes('Sens:')) {
         const rpmM  = text.match(/RPM:\s*(\d+)/);
         const sensM = text.match(/Sens:\s*(\d+)/);
-
-        // Kalikan RPM raw dengan multiplier
         if (rpmM) rpmVal.innerText = Math.round(parseInt(rpmM[1]) * rpmMultiplier);
-
         if (sensM) {
             const div = Math.round(parseInt(sensM[1]) / 4);
             sensVal.innerText = div;
@@ -437,4 +332,22 @@ function handleNotifications(event) {
     else if (text.includes('C1:1k-4k'))     setVal('c1', text.split(':')[2].trim());
     else if (text.includes('C2:4k-6k'))     setVal('c2', text.split(':')[2].trim());
     else if (text.includes('C3:6k-8k'))     setVal('c3', text.split(':')[2].trim());
-    else if (text.includes('C4:8k-10k'))    setVal('c4', text.s
+    else if (text.includes('C4:8k-10k'))    setVal('c4', text.split(':')[2].trim());
+    else if (text.includes('C5:10k-12k'))   setVal('c5', text.split(':')[2].trim());
+    else if (text.includes('C6:12k-14k'))   setVal('c6', text.split(':')[2].trim());
+    else if (text.includes('C7:14k+'))      setVal('c7', text.split(':')[2].trim());
+    else logToTerminal(text);
+}
+
+async function sendCmd(cmd) {
+    if (!rxCharacteristic) { logToTerminal('Belum konek!', 'log-err'); return; }
+    try {
+        await rxCharacteristic.writeValue(new TextEncoder().encode(cmd));
+        logToTerminal(cmd, 'log-tx');
+    } catch(e) {
+        logToTerminal('Gagal kirim: ' + cmd, 'log-err');
+    }
+}
+</script>
+</body>
+</html>
