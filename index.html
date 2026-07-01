@@ -303,8 +303,11 @@ connectBtn.addEventListener('click', async () => {
         txCharacteristic.addEventListener('characteristicvaluechanged', handleNotifications);
 
         setUI(true, 'Terkoneksi ✓');
-        logToTerminal('Bluetooth Berhasil Terkoneksi!');
+logToTerminal('Bluetooth Berhasil Terkoneksi!');
 
+// Auto-request semua setting setelah konek
+setTimeout(() => sendCmd('INFO'), 600);   // ambil data QS + cut time
+setTimeout(() => sendCmd('PI'),   1200);  // ambil data Pit Limiter
     } catch (error) {
         console.error(error);
         const msg = error.message || String(error);
